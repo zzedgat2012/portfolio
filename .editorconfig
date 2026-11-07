@@ -1,0 +1,32 @@
+# https://editorconfig.org
+# Kept in sync with biome.jsonc (2 spaces, LF, 100 columns).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 100
+
+# Markdown: two trailing spaces are a hard line break.
+# Covers AGENTS.md, CLAUDE.md, DESIGN.md, docs/ and the BMAD artifacts.
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Strapi content-type schemas, lockfiles and generated files keep the tool's own layout.
+[{**/schema.json,pnpm-lock.yaml,apps/cms/types/generated/**}]
+max_line_length = off
+
+# Environment files: never strip whitespace that may be part of a value.
+[.env*]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
+
+[*.{sh,bash}]
+max_line_length = off

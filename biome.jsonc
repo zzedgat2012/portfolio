@@ -1,0 +1,264 @@
+// Biome (v2) — single root config for the whole monorepo.
+// Replaces ESLint + Prettier. Rules mirror AGENTS.md / docs/conventions.md.
+//   pnpm biome check .           lint + format + import sorting (CI)
+//   pnpm biome check --write .   apply safe fixes locally
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "root": true,
+
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
+  },
+
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      // build and runtime output
+      "!**/dist",
+      "!**/build",
+      "!**/.turbo",
+      "!**/coverage",
+      "!apps/cms/.strapi",
+      "!apps/cms/.cache",
+      "!apps/cms/public/uploads",
+      // generated: never edited by hand (AGENTS.md › Never)
+      "!apps/cms/types/generated",
+      // Playwright output
+      "!apps/web/playwright-report",
+      "!apps/web/test-results",
+      // BMAD framework install and its generated artifacts
+      "!_bmad",
+      "!_bmad-output",
+      // AI agent tooling installed by third parties (skills, steering, lockfiles):
+      // reformatting them breaks upstream diffs and SKILL.md frontmatter
+      "!.agents",
+      "!.claude",
+      "!.kiro",
+      "!skills-lock.json",
+      "!pnpm-lock.yaml"
+    ]
+  },
+
+  "formatter": {
+    "enabled": true,
+    "useEditorconfig": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 100
+  },
+
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "arrowParentheses": "always",
+      "bracketSpacing": true
+    }
+  },
+
+  "json": {
+    "formatter": { "trailingCommas": "none" }
+  },
+
+  "css": {
+    // Tailwind v4 directives (@theme, @apply, @variant…) carried over from Sage
+    "parser": { "tailwindDirectives": true },
+    "formatter": { "quoteStyle": "double" }
+  },
+
+  "assist": {
+    "actions": {
+      "source": { "organizeImports": "on" }
+    }
+  },
+
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "react": "recommended",
+      "test": "recommended"
+    },
+    "rules": {
+      "preset": "recommended",
+
+      "suspicious": {
+        // No `any`: use `unknown` + Zod at boundaries
+        "noExplicitAny": "error",
+        // `test.only` must never be committed (forbidOnly also on in CI)
+        "noFocusedTests": "error",
+        "noSkippedTests": "warn",
+        "noConsole": { "level": "warn", "options": { "allow": ["warn", "error"] } }
+      },
+
+      "security": {
+        // Rich text goes through @strapi/blocks-react-renderer
+        "noDangerouslySetInnerHtml": "error"
+      },
+
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error"
+      },
+
+      "style": {
+        // Named exports only; framework entry points are re-enabled in overrides
+        "noDefaultExport": "error",
+        // No TS `enum`: string-literal unions or `as const`
+        "noEnum": "error",
+        "noNonNullAssertion": "error",
+        "noParameterAssign": "error",
+        "useConst": "error",
+        "useImportType": "error",
+        "useExportType": "error",
+        "useNodejsImportProtocol": "error",
+        "useTemplate": "error",
+        "useBlockStatements": "error",
+
+        // Files: kebab-case by default; .tsx may also be PascalCase (overrides)
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "requireAscii": true,
+            "filenameCases": ["kebab-case"]
+          }
+        },
+
+        // Identifiers, per AGENTS.md › Naming
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": false,
+            "requireAscii": true,
+            "conventions": [
+              // Types, interfaces, classes: PascalCase (no `I` prefix)
+              {
+                "selector": { "kind": "interface" },
+                "match": "([^I].*|I[^A-Z].*|I)",
+                "formats": ["PascalCase"]
+              },
+              { "selector": { "kind": "typeLike" }, "formats": ["PascalCase"] },
+              // Generic params: T, TData, TKey…
+              { "selector": { "kind": "typeParameter" }, "formats": ["PascalCase"] },
+
+              // Functions: camelCase; PascalCase for React components
+              { "selector": { "kind": "function" }, "formats": ["camelCase", "PascalCase"] },
+
+              // Module-level consts: camelCase, PascalCase (components), CONSTANT_CASE
+              {
+                "selector": { "kind": "const", "scope": "global" },
+                "formats": ["camelCase", "PascalCase", "CONSTANT_CASE"]
+              },
+              { "selector": { "kind": "variable" }, "formats": ["camelCase", "PascalCase"] },
+
+              // Object/type members carry external shapes (Strapi `__component`,
+              // `$eq` filters, HTTP headers, Postgres config): any format allowed.
+              { "selector": { "kind": "objectLiteralMember" }, "match": ".*" },
+              { "selector": { "kind": "typeMember" }, "match": ".*" },
+
+              // Imports keep the library's own casing (React, qs, z…)
+              { "selector": { "kind": "importNamespace" }, "match": ".*" },
+              { "selector": { "kind": "importAlias" }, "match": ".*" }
+            ]
+          }
+        }
+      },
+
+      "complexity": {
+        "noForEach": "off",
+        "useLiteralKeys": "error"
+      }
+    }
+  },
+
+  "overrides": [
+    {
+      // Markdown is not reformatted: AGENTS.md, CLAUDE.md (@ imports), DESIGN.md (owned by
+      // bmad-ux) and docs/ keep their authored layout and frontmatter.
+      "includes": ["**/*.md"],
+      "formatter": { "enabled": false },
+      "linter": { "enabled": false }
+    },
+    {
+      // React components and route modules: PascalCase.tsx or kebab-case.tsx
+      "includes": ["**/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": { "requireAscii": true, "filenameCases": ["kebab-case", "PascalCase"] }
+            }
+          }
+        }
+      }
+    },
+    {
+      // Framework entry points that require default exports and their own file names:
+      // Strapi factories/config, web routes, tool configs.
+      "includes": [
+        "apps/cms/src/**",
+        "apps/cms/config/**",
+        "apps/cms/database/**",
+        "apps/web/app/**",
+        "**/*.config.ts",
+        "**/*.config.mts",
+        "**/*.config.js",
+        "**/*.config.mjs"
+      ],
+      "linter": {
+        "rules": {
+          "style": { "noDefaultExport": "off" }
+        }
+      }
+    },
+    {
+      // Route files use framework syntax ($slug, _index, dots) and Strapi migrations
+      // use timestamped names (YYYY.MM.DDTHH.MM.SS.short-description.js).
+      "includes": ["apps/web/app/routes/**", "apps/cms/database/migrations/**"],
+      "linter": {
+        "rules": {
+          "style": { "useFilenamingConvention": "off" }
+        }
+      }
+    },
+    {
+      // Strapi: logging goes through strapi.log; keep `console` as a warning only.
+      "includes": ["apps/cms/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": { "level": "warn", "options": { "allow": ["warn", "error"] } }
+          }
+        }
+      }
+    },
+    {
+      // CLI scripts: the migrator and seeders report progress on stdout.
+      "includes": ["packages/migrator/**", "apps/cms/scripts/**"],
+      "linter": {
+        "rules": {
+          "suspicious": { "noConsole": "off" }
+        }
+      }
+    },
+    {
+      // Tests: Vitest units and Playwright e2e (TDD).
+      "includes": ["**/*.test.ts", "**/*.test.tsx", "apps/web/e2e/**"],
+      "linter": {
+        "rules": {
+          "style": { "noNonNullAssertion": "off" },
+          "suspicious": { "noConsole": "off" }
+        }
+      }
+    }
+  ]
+}

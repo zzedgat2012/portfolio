@@ -1,0 +1,148 @@
+# Local development stack for the portfolio monorepo.
+#
+#   docker compose up -d postgres            # DB only; run apps on the host with pnpm (default workflow)
+#   docker compose --profile full up -d      # DB + Strapi + web, all in containers
+#   docker compose --profile e2e up -d       # isolated Postgres + Strapi for Playwright (TDD loop)
+#   docker compose down -v                   # stop and wipe volumes
+#
+# Copy .env.example to .env first. Never use these values outside local development.
+
+name: portfolio
+
+x-node-app: &node-app
+  image: node:22-alpine
+  working_dir: /repo
+  volumes:
+    - .:/repo
+    - node_modules:/repo/node_modules
+    - cms_node_modules:/repo/apps/cms/node_modules
+    - web_node_modules:/repo/apps/web/node_modules
+    - pnpm_store:/pnpm/store
+  environment: &node-env
+    PNPM_HOME: /pnpm
+    npm_config_store_dir: /pnpm/store
+  restart: unless-stopped
+
+x-strapi-env: &strapi-env
+  HOST: 0.0.0.0
+  PORT: 1337
+  NODE_ENV: development
+  DATABASE_CLIENT: postgres
+  DATABASE_PORT: 5432
+  DATABASE_SSL: "false"
+  APP_KEYS: ${APP_KEYS}
+  API_TOKEN_SALT: ${API_TOKEN_SALT}
+  ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+  TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+  JWT_SECRET: ${JWT_SECRET}
+  ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+
+services:
+  # ---------- default: database only ----------
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME:-portfolio}
+      POSTGRES_USER: ${DATABASE_USERNAME:-strapi}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-strapi}
+    ports:
+      - "${DATABASE_HOST_PORT:-5432}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ---------- profile "full": apps in containers ----------
+  cms:
+    <<: *node-app
+    profiles: [full]
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter cms develop"
+    environment:
+      <<: [*node-env, *strapi-env]
+      DATABASE_HOST: postgres
+      DATABASE_NAME: ${DATABASE_NAME:-portfolio}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-strapi}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-strapi}
+    ports:
+      - "1337:1337"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:1337/_health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  web:
+    <<: *node-app
+    profiles: [full]
+    # cms already ran `pnpm install` on the shared volumes
+    command: sh -c "corepack enable && pnpm --filter web dev --host 0.0.0.0 --port 3000"
+    environment:
+      <<: *node-env
+      CMS_URL: http://cms:1337
+      CMS_TOKEN: ${CMS_TOKEN}
+    ports:
+      - "3000:3000"
+    depends_on:
+      cms:
+        condition: service_healthy
+
+  # ---------- profile "e2e": isolated stack for Playwright ----------
+  postgres-test:
+    image: postgres:16-alpine
+    profiles: [e2e]
+    environment:
+      POSTGRES_DB: portfolio_test
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+    ports:
+      - "5433:5432"
+    tmpfs:
+      - /var/lib/postgresql/data # throwaway: every `up` starts empty
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U strapi -d portfolio_test"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  cms-test:
+    <<: *node-app
+    profiles: [e2e]
+    restart: "no"
+    command: >
+      sh -c "corepack enable && pnpm install --frozen-lockfile
+      && pnpm --filter cms build
+      && pnpm --filter cms seed:test
+      && pnpm --filter cms start"
+    environment:
+      <<: [*node-env, *strapi-env]
+      NODE_ENV: test
+      DATABASE_HOST: postgres-test
+      DATABASE_NAME: portfolio_test
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+    ports:
+      - "1338:1337"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:1337/_health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 90s
+
+volumes:
+  pg_data:
+  pnpm_store:
+  node_modules:
+  cms_node_modules:
+  web_node_modules:

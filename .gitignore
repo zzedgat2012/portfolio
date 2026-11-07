@@ -1,0 +1,35 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# env (keep .env.example)
+.env
+.env.*
+!.env.example
+
+# build output
+dist/
+build/
+.turbo/
+coverage/
+
+# Strapi
+apps/cms/.strapi/
+apps/cms/.cache/
+apps/cms/.tmp/
+apps/cms/public/uploads/*
+!apps/cms/public/uploads/.gitkeep
+
+# Playwright
+apps/web/playwright-report/
+apps/web/test-results/
+apps/web/blob-report/
+apps/web/playwright/.cache/
+
+# original WordPress theme: local reference only (see AGENTS.md › Legacy WordPress reference)
+external/
+
+# editors / OS
+.DS_Store
+.idea/
+*.log
