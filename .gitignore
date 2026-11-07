@@ -17,6 +17,7 @@ coverage/
 apps/cms/.strapi/
 apps/cms/.cache/
 apps/cms/.tmp/
+apps/cms/.strapi-updater.json
 apps/cms/public/uploads/*
 !apps/cms/public/uploads/.gitkeep
 

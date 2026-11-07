@@ -25,6 +25,8 @@
       "!apps/cms/.strapi",
       "!apps/cms/.cache",
       "!apps/cms/public/uploads",
+      // Strapi admin panel: separate Vite app, excluded from server tsconfig
+      "!apps/cms/src/admin",
       // generated: never edited by hand (AGENTS.md › Never)
       "!apps/cms/types/generated",
       // Playwright output
@@ -227,6 +229,16 @@
       "linter": {
         "rules": {
           "style": { "useFilenamingConvention": "off" }
+        }
+      }
+    },
+    {
+      // Strapi config and source: env() returns T | undefined; the framework's
+      // standard pattern uses non-null assertions for required secrets.
+      "includes": ["apps/cms/config/**", "apps/cms/src/**"],
+      "linter": {
+        "rules": {
+          "style": { "noNonNullAssertion": "off" }
         }
       }
     },
