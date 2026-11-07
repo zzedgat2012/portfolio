@@ -1,0 +1,23 @@
+{
+  "name": "portfolio",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "e2e": "turbo test:e2e"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.6",
+    "turbo": "2.11.10",
+    "typescript": "7.0.2"
+  }
+}
