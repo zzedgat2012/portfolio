@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Content Manager</title>
-    <!-- Decap CMS, pinned to an exact version with SRI. Upgrade deliberately:
-         change the version, recompute the hash, and check the admin by hand. -->
+  </head>
+  <body>
+    <!-- Decap CMS, pinned to an exact version with SRI. It mounts itself into <body> as soon as
+         it loads, so the script must stay inside <body> (in <head> it crashes: body is null).
+         Upgrade deliberately: change the version, recompute the hash, run e2e/admin. -->
     <script
       src="https://unpkg.com/decap-cms@3.17.3/dist/decap-cms.js"
       integrity="sha384-RWRzuHfiZSWCt3nEvG7B0v3cMgM1C2UuJmgBSL92GQh4uXmNSkbcthql/mNBqvjr"
       crossorigin="anonymous"
     ></script>
-  </head>
-  <body></body>
+  </body>
 </html>

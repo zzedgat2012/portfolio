@@ -620,7 +620,7 @@ Rules:
 - **Tags:** `@smoke` marks the critical path; CI runs `--grep @smoke` on every PR and the full suite on `main`.
 - **Hygiene:** `forbidOnly: !!process.env.CI`; no skipped test without a linked issue; traces and videos `on-first-retry`.
 - Every new section type gets fixture content and a spec proving it renders.
-- The Decap admin itself is not covered by E2E; its contract is guarded by the `config.yml` ↔ Zod parity test.
+- The Decap admin gets one boot spec (`e2e/admin`): it loads without script errors and offers a login. Its content model is guarded by the `config.yml` ↔ Zod parity test, not by E2E.
 - `playwright codegen` is for discovering locators only; rewrite its output to these rules.
 
 ### Definition of done for a change
