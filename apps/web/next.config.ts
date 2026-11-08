@@ -6,6 +6,8 @@ import type { NextConfig } from 'next';
  */
 const nextConfig: NextConfig = {
   output: 'export',
+  // D1: URLs end in `/` like WordPress; the export writes <route>/index.html.
+  trailingSlash: true,
   images: { unoptimized: true },
   poweredByHeader: false,
   reactStrictMode: true,

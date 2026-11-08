@@ -10,7 +10,7 @@ development_status:
   1-1-content-model: review
   1-2-wordpress-migrator: review
   epic-2: backlog
-  2-1-site-shell: ready-for-dev
+  2-1-site-shell: review
   2-2-home-page: ready-for-dev
   2-3-project-page: ready-for-dev
   2-4-article-page: ready-for-dev

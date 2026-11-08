@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${firaCode.variable} ${openSans.variable}`}>
-      <body>{children}</body>
+      <body className="flex min-h-screen flex-col antialiased">{children}</body>
     </html>
   );
 }

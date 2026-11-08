@@ -1,2 +1,4 @@
-// Design-system primitives (Button, Container, Image…) are added by stories.
-export {};
+// Design-system primitives: presentational only, they never read content.
+export { CircleAccent } from './CircleAccent';
+export { Container } from './Container';
+export { SkipLink } from './SkipLink';
