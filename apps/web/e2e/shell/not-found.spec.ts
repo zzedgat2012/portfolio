@@ -34,7 +34,7 @@ test.describe('[story 2.1] Not-found page', () => {
     await notFoundPage.goHome();
 
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole('heading', { level: 1, name: 'Edgar Ferreira' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'Product Engineer' })).toBeVisible();
   });
 
   test('returns to the previous page with Go Back', async ({ page, siteShell, notFoundPage }) => {

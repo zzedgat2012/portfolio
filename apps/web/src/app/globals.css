@@ -25,6 +25,17 @@
   --color-input: #3d3d3d;
   --color-ring: #a8a8a8;
 
+  /* Component literals (DESIGN.md › Colors: off-white, pill-hover, slide-*, code-*) */
+  --color-off-white: #f5f5f5;
+  --color-pill: #ffffff;
+  --color-pill-hover: oklch(96.7% 0.003 264.542);
+  --color-slide-panel-from: #1a1a1a;
+  --color-slide-panel-to: #0f0f0f;
+  --color-slide-meta: oklch(55.1% 0.027 264.364);
+  --color-slide-body: oklch(70.7% 0.022 261.325);
+  --color-code-surface: #1e1e1e;
+  --color-code-ink: #d4d4d4;
+
   /* Letter spacing (DESIGN.md › Typography: eyebrow, meta-caps) */
   --tracking-eyebrow: 0.8em;
   --tracking-meta: 0.35em;
@@ -38,6 +49,11 @@
   --radius-3xl: 24px;
   --radius-slide: 40px;
   --radius-code: 4px;
+
+  /* Elevation (DESIGN.md › Elevation & Depth) */
+  --shadow-glow: 0 0 20px rgb(166 166 166 / 0.15);
+  --shadow-slide: 0 20px 60px rgba(0, 0, 0, 0.45);
+  --shadow-cta-inset: inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 html,

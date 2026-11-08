@@ -5,3 +5,4 @@ export type {
   Profile,
   ProfileLink,
 } from './profile';
+export { findProfileLinkByIcon } from './profile-links';

@@ -9,6 +9,7 @@ describe('[story 1.1] project queries', () => {
     expect(projects.map((project) => project.slug)).toEqual([
       'seed-project-without-links',
       'seed-featured-project',
+      'seed-second-featured-project',
     ]);
   });
 
@@ -34,6 +35,7 @@ describe('[story 1.1] project queries', () => {
   test('listFeaturedProjects returns only featured projects', async () => {
     expect((await listFeaturedProjects()).map((project) => project.slug)).toEqual([
       'seed-featured-project',
+      'seed-second-featured-project',
     ]);
   });
 });
