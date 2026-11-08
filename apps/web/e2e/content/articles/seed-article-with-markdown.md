@@ -33,4 +33,10 @@ export function hello(name) {
 select 1 from dual;
 ```
 
+```
+*app.example.com/*
+```
+
+1\. An escaped number that stays a paragraph.
+
 The end.
