@@ -26,6 +26,155 @@ media_folder: apps/web/public/uploads
 public_folder: /uploads
 
 collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: content/projects
+    extension: md
+    format: frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{sortOrder}}. {{title}}"
+    sortable_fields: [sortOrder, title]
+    fields:
+      - name: title
+        label: Title
+        widget: string
+        pattern: ['^\S.{0,119}$', "Between 1 and 120 characters"]
+      - name: summary
+        label: Summary
+        hint: One or two sentences for cards and search results.
+        widget: text
+        pattern: ['^\S[\s\S]{0,279}$', "Between 1 and 280 characters"]
+      - name: coverImage
+        label: Cover image
+        hint: 16:9, web-sized.
+        widget: image
+        choose_url: false
+      - name: coverImageAlt
+        label: Cover image alt text
+        widget: string
+        pattern: ['^\S.{0,199}$', "Between 1 and 200 characters"]
+      - name: tags
+        label: Tags
+        widget: relation
+        collection: tags
+        search_fields: [name]
+        display_fields: [name]
+        value_field: "{{slug}}"
+        multiple: true
+        required: false
+      - name: technologies
+        label: Technologies
+        widget: list
+        required: false
+        field: { name: technology, label: Technology, widget: string }
+      - name: features
+        label: Key features
+        widget: list
+        required: false
+        field: { name: feature, label: Feature, widget: string }
+      - name: demoUrl
+        label: Demo URL
+        widget: string
+        required: false
+        pattern: ['^https?://\S+$', "A full http(s) URL"]
+      - name: codeUrl
+        label: Code URL
+        widget: string
+        required: false
+        pattern: ['^https?://\S+$', "A full http(s) URL"]
+      - name: sortOrder
+        label: Sort order
+        hint: Lower numbers come first.
+        widget: number
+        value_type: int
+        min: 0
+        max: 999
+      - name: isFeatured
+        label: Featured on the home page
+        widget: boolean
+        required: false
+        default: false
+      - name: legacyWpId
+        label: WordPress ID
+        widget: hidden
+        required: false
+      - name: body
+        label: Overview
+        widget: markdown
+
+  - name: articles
+    label: Articles
+    label_singular: Article
+    folder: content/articles
+    extension: md
+    format: frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{publishedOn}} · {{title}}"
+    sortable_fields: [publishedOn, title]
+    fields:
+      - name: title
+        label: Title
+        widget: string
+        pattern: ['^\S.{0,159}$', "Between 1 and 160 characters"]
+      - name: summary
+        label: Summary
+        widget: text
+        pattern: ['^\S[\s\S]{0,279}$', "Between 1 and 280 characters"]
+      - name: publishedOn
+        label: Published on
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - name: tags
+        label: Tags
+        widget: relation
+        collection: tags
+        search_fields: [name]
+        display_fields: [name]
+        value_field: "{{slug}}"
+        multiple: true
+        required: false
+      - name: coverImage
+        label: Cover image
+        widget: image
+        choose_url: false
+        required: false
+      - name: coverImageAlt
+        label: Cover image alt text
+        hint: Required when there is a cover image.
+        widget: string
+        required: false
+        pattern: ['^\S.{0,199}$', "Between 1 and 200 characters"]
+      - name: legacyWpId
+        label: WordPress ID
+        widget: hidden
+        required: false
+      - name: body
+        label: Body
+        widget: markdown
+
+  - name: tags
+    label: Tags
+    label_singular: Tag
+    folder: content/tags
+    extension: yml
+    format: yml
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    sortable_fields: [name]
+    fields:
+      - name: name
+        label: Name
+        widget: string
+        pattern: ['^\S.{0,59}$', "Between 1 and 60 characters"]
+
   - name: settings
     label: Settings
     editor:
@@ -45,3 +194,180 @@ collections:
             widget: text
             required: false
             pattern: ['^[\s\S]{0,160}$', "At most 160 characters"]
+          - name: siteUrl
+            label: Site URL
+            hint: Canonical origin, without a trailing slash (https://edgar-ferreira.com).
+            widget: string
+            pattern:
+              [
+                '^https?://[a-z0-9.-]+(:\d+)?$',
+                "An origin like https://example.com, no trailing slash",
+              ]
+
+      - name: profile
+        label: Profile
+        file: content/settings/profile.yml
+        fields:
+          - {
+              name: name,
+              label: Name,
+              widget: string,
+              pattern: ['^\S.{0,79}$', "Between 1 and 80 characters"],
+            }
+          - {
+              name: role,
+              label: Role,
+              widget: string,
+              pattern: ['^\S.{0,79}$', "Between 1 and 80 characters"],
+            }
+          - {
+              name: location,
+              label: Location,
+              widget: string,
+              pattern: ['^\S.{0,119}$', "Between 1 and 120 characters"],
+            }
+          - name: heroTitle
+            label: Hero title
+            hint: The last word is shown on its own line.
+            widget: string
+            pattern: ['^\S.{0,79}$', "Between 1 and 80 characters"]
+          - name: heroTagline
+            label: Hero tagline
+            widget: text
+            pattern: ['^\S[\s\S]{0,299}$', "Between 1 and 300 characters"]
+          - { name: portrait, label: Portrait, widget: image, choose_url: false }
+          - {
+              name: portraitAlt,
+              label: Portrait alt text,
+              widget: string,
+              pattern: ['^\S.{0,199}$', "Between 1 and 200 characters"],
+            }
+          - { name: bio, label: About (bio), widget: markdown }
+          - name: technologies
+            label: Technologies & Tools
+            widget: list
+            min: 1
+            field: { name: technology, label: Technology, widget: string }
+          - name: whatIDo
+            label: What I Do
+            widget: list
+            min: 1
+            field: { name: item, label: Item, widget: string }
+          - name: education
+            label: Education
+            widget: list
+            required: false
+            field: { name: item, label: Item, widget: string }
+          - name: certifications
+            label: Certifications
+            widget: list
+            required: false
+            summary: "{{year}} · {{title}}"
+            fields:
+              - { name: year, label: Year, widget: number, value_type: int, min: 1900, max: 2100 }
+              - { name: title, label: Title, widget: string }
+          - name: experience
+            label: Experience
+            hint: Newest first.
+            widget: list
+            min: 1
+            summary: "{{startOn}} – {{endOn}} · {{company}}"
+            fields:
+              - { name: company, label: Company, widget: string }
+              - { name: role, label: Role, widget: string }
+              - name: startOn
+                label: Start (YYYY-MM)
+                widget: string
+                pattern: ['^\d{4}-(0[1-9]|1[0-2])$', "YYYY-MM"]
+              - name: endOn
+                label: End (YYYY-MM)
+                hint: Leave empty while this is your current position.
+                widget: string
+                required: false
+                pattern: ['^\d{4}-(0[1-9]|1[0-2])$', "YYYY-MM"]
+          - name: experienceSummary
+            label: Experience summary
+            widget: string
+            pattern: ['^\S.{0,199}$', "Between 1 and 200 characters"]
+          - name: contact
+            label: Contact
+            widget: object
+            fields:
+              - { name: phone, label: Phone, widget: string }
+              - name: email
+                label: Email
+                widget: string
+                pattern: ['^[^@\s]+@[^@\s]+\.[^@\s]+$', "An email address"]
+              - name: website
+                label: Website
+                widget: string
+                pattern: ['^https?://\S+$', "A full http(s) URL"]
+              - { name: languages, label: Languages, widget: string }
+          - name: links
+            label: Links
+            widget: list
+            min: 1
+            summary: "{{label}}"
+            fields:
+              - { name: label, label: Label, widget: string }
+              - name: url
+                label: URL
+                widget: string
+                pattern: ['^(https?://|mailto:|tel:)\S+$', "An http(s), mailto: or tel: URL"]
+              - name: icon
+                label: Icon
+                widget: select
+                options:
+                  [
+                    portfolio,
+                    website,
+                    linkedin,
+                    github,
+                    email,
+                    phone,
+                    whatsapp,
+                    facebook,
+                    instagram,
+                    twitter,
+                  ]
+              - {
+                  name: showInHero,
+                  label: Show in hero,
+                  widget: boolean,
+                  required: false,
+                  default: false,
+                }
+              - {
+                  name: showInContact,
+                  label: Show in contact,
+                  widget: boolean,
+                  required: false,
+                  default: false,
+                }
+
+      - name: redirects
+        label: Redirects
+        file: content/settings/redirects.yml
+        fields:
+          - name: redirects
+            label: Redirects
+            hint: Old URL paths that must keep working (301 permanent, 302 temporary).
+            widget: list
+            required: false
+            summary: "{{from}} → {{to}} ({{status}})"
+            fields:
+              - name: from
+                label: From (path)
+                widget: string
+                pattern: ['^/\S*$', "A site path starting with /"]
+              - name: to
+                label: To (path or URL)
+                widget: string
+                pattern: ['^(/|https?://)\S*$', "A path starting with / or a full URL"]
+              - name: status
+                label: Status
+                widget: number
+                value_type: int
+                default: 301
+                min: 301
+                max: 302

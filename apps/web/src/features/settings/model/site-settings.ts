@@ -2,4 +2,6 @@
 export type SiteSettings = {
   siteName: string;
   description: string | null;
+  /** Canonical origin without trailing slash, e.g. `https://edgar-ferreira.com`. */
+  siteUrl: string;
 };

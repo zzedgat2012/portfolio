@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { type ContentModel, contentModel } from '@portfolio/contracts';
+import { type ContentModel, contentModel, listBrokenRelations } from '@portfolio/contracts';
 import { describe, expect, test } from 'vitest';
 import { parse as parseYaml } from 'yaml';
 import { z } from 'zod';
@@ -19,10 +19,19 @@ const CONTENT_ROOTS = {
   'e2e fixtures': path.join(REPO_ROOT, 'apps/web/e2e/content'),
 };
 
-const decapFieldSchema = z.looseObject({
+type DecapField = {
+  name: string;
+  widget: string;
+  required?: boolean | undefined;
+  fields?: DecapField[] | undefined;
+};
+const decapFieldSchema: z.ZodType<DecapField> = z.looseObject({
   name: z.string(),
   widget: z.string(),
   required: z.boolean().optional(),
+  get fields() {
+    return z.array(decapFieldSchema).optional();
+  },
 });
 const decapFolderCollectionSchema = z.looseObject({
   name: z.string(),
@@ -42,7 +51,6 @@ const decapConfigSchema = z.looseObject({
   public_folder: z.string(),
   collections: z.array(z.looseObject({ name: z.string() })),
 });
-type DecapField = z.infer<typeof decapFieldSchema>;
 
 const config = decapConfigSchema.parse(parseYaml(await readFile(CONFIG_PATH, 'utf8')));
 const model: ContentModel = contentModel;
@@ -62,18 +70,54 @@ test('every Decap collection is either a file or a folder collection', () => {
   expect(decapFiles.length + decapFolders.length).toBeGreaterThanOrEqual(config.collections.length);
 });
 
-/** Field names Decap edits, and whether Decap requires each one (Decap's default is required). */
-function describeDecapFields(fields: DecapField[]) {
-  return Object.fromEntries(fields.map((field) => [field.name, field.required !== false]));
+/** The Markdown body of an `md` entry: a Decap field, but not part of the frontmatter schema. */
+const BODY_FIELD = 'body';
+
+type FieldDescription = { isRequired: boolean; fields?: Record<string, FieldDescription> };
+
+/**
+ * Field names Decap edits, whether Decap requires each one (Decap's default is required) and,
+ * for object/list widgets with `fields`, the same description of their sub-fields.
+ */
+function describeDecapFields(fields: DecapField[]): Record<string, FieldDescription> {
+  return Object.fromEntries(
+    fields.map((field) => [
+      field.name,
+      {
+        isRequired: field.required !== false,
+        ...(field.fields ? { fields: describeDecapFields(field.fields) } : {}),
+      },
+    ]),
+  );
 }
 
-/** Field names Zod knows, and whether each one rejects `undefined`. */
-function describeZodFields(schema: z.ZodObject) {
+/** The object schema inside optional/default wrappers and arrays, if any. */
+function findNestedObject(schema: z.ZodType): z.ZodObject | null {
+  if (schema instanceof z.ZodObject) {
+    return schema;
+  }
+  if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
+    return findNestedObject(schema.unwrap() as z.ZodType);
+  }
+  if (schema instanceof z.ZodArray) {
+    return findNestedObject(schema.element as z.ZodType);
+  }
+  return null;
+}
+
+/** Field names Zod knows, whether each one rejects `undefined`, and nested object fields. */
+function describeZodFields(schema: z.ZodObject): Record<string, FieldDescription> {
   return Object.fromEntries(
-    Object.entries(schema.shape).map(([name, field]) => [
-      name,
-      !(field as z.ZodType).safeParse(undefined).success,
-    ]),
+    Object.entries(schema.shape).map(([name, field]) => {
+      const nested = findNestedObject(field as z.ZodType);
+      return [
+        name,
+        {
+          isRequired: !(field as z.ZodType).safeParse(undefined).success,
+          ...(nested ? { fields: describeZodFields(nested) } : {}),
+        },
+      ];
+    }),
   );
 }
 
@@ -107,6 +151,15 @@ describe('Decap config.yml', () => {
     });
   });
 
+  describe.each(decapFolders.filter((folder) => folder.extension === 'md'))(
+    'Markdown folder collection $name',
+    (folder) => {
+      test('edits the Markdown body with a markdown widget', () => {
+        expect(folder.fields.find((field) => field.name === BODY_FIELD)?.widget).toBe('markdown');
+      });
+    },
+  );
+
   describe.each(decapFolders)('folder collection $name', (folder) => {
     const folderModel = model.folders[folder.name];
 
@@ -117,7 +170,28 @@ describe('Decap config.yml', () => {
 
     test('has the same fields, with the same required-ness, as the Zod schema', () => {
       expect(folderModel).toBeDefined();
-      expect(describeDecapFields(folder.fields)).toEqual(describeZodFields(folderModel!.schema));
+      const frontmatterFields = folder.fields.filter(
+        (field) => folder.extension !== 'md' || field.name !== BODY_FIELD,
+      );
+      expect(describeDecapFields(frontmatterFields)).toEqual(
+        describeZodFields(folderModel!.schema),
+      );
+    });
+
+    test.each(folderModel?.relations ?? [])(
+      '[story 1.1] edits $field with a relation widget to $collection',
+      (relation) => {
+        expect(folder.fields.find((field) => field.name === relation.field)).toMatchObject({
+          widget: 'relation',
+          collection: relation.collection,
+          value_field: '{{slug}}',
+        });
+      },
+    );
+
+    test('[story 1.1] hides legacyWpId from editors', () => {
+      const legacyWpId = folder.fields.find((field) => field.name === 'legacyWpId');
+      expect(legacyWpId === undefined || legacyWpId.widget === 'hidden').toBe(true);
     });
   });
 });
@@ -131,5 +205,19 @@ describe.each(Object.entries(CONTENT_ROOTS))('%s', (_label, root) => {
 
   test.each(Object.entries(model.folders))('has only valid %s entries', async (name, folder) => {
     await expect(source.listEntries(name, folder.schema)).resolves.toBeDefined();
+  });
+
+  test('[story 1.1] has relations that all point to existing entries', async () => {
+    const entries = Object.fromEntries(
+      await Promise.all(
+        Object.entries(model.folders).map(
+          async ([name, folder]) => [name, await source.listEntries(name, folder.schema)] as const,
+        ),
+      ),
+    );
+
+    const brokenRelations = listBrokenRelations(model, entries);
+
+    expect(brokenRelations, brokenRelations.join('\n')).toEqual([]);
   });
 });

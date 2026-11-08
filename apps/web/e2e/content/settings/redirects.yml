@@ -1,0 +1,11 @@
+# Fixture redirects (story 1.1).
+redirects:
+  - from: /feed/
+    to: /feed.xml
+    status: 301
+  - from: /wp-sitemap.xml
+    to: /sitemap.xml
+    status: 301
+  - from: /seed-temporary/
+    to: /project/seed-featured-project/
+    status: 302

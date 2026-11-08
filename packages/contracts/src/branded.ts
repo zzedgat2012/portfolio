@@ -4,7 +4,7 @@
  */
 export type Slug = string & { readonly __brand: 'Slug' };
 
-const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 /** True for kebab-case slugs; anything else (paths, `..`, uppercase) is rejected. */
 export function isSlug(value: string): value is Slug {

@@ -1,0 +1,7 @@
+redirects:
+  - from: /wp-sitemap.xml
+    to: /sitemap.xml
+    status: 301
+  - from: /feed/
+    to: /feed.xml
+    status: 301

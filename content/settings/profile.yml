@@ -1,0 +1,29 @@
+# Placeholder (story 1.1): the WordPress migrator overwrites this file in story 1.2.
+name: Edgar Ferreira
+role: Product Engineer
+location: Aracaju, Sergipe, Brazil
+heroTitle: Product Engineer
+heroTagline: Placeholder tagline, replaced by the WordPress import.
+portrait: /uploads/portrait.jpg
+portraitAlt: Portrait of Edgar Ferreira
+bio: Placeholder bio, replaced by the WordPress import.
+technologies:
+  - Oracle APEX
+whatIDo:
+  - Placeholder, replaced by the WordPress import.
+experience:
+  - company: Placeholder
+    role: Product Engineer
+    startOn: 2025-03
+experienceSummary: Placeholder, replaced by the WordPress import.
+contact:
+  phone: Placeholder
+  email: contact@edgar-ferreira.com
+  website: https://edgar-ferreira.com
+  languages: Portuguese (Native) · English (Professional)
+links:
+  - label: Portfolio
+    url: https://edgar-ferreira.com
+    icon: portfolio
+    showInHero: true
+    showInContact: true

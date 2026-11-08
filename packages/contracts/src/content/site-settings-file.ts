@@ -7,6 +7,10 @@ import { z } from 'zod';
 export const siteSettingsFileSchema = z.strictObject({
   siteName: z.string().min(1).max(80),
   description: z.string().max(160).optional(),
+  /** Canonical origin, e.g. `https://edgar-ferreira.com` (no trailing slash). */
+  siteUrl: z
+    .string()
+    .regex(/^https?:\/\/[a-z0-9.-]+(:\d+)?$/, 'Must be an origin like https://example.com'),
 });
 
 export type SiteSettingsFile = z.infer<typeof siteSettingsFileSchema>;

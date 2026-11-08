@@ -1,0 +1,66 @@
+# Fixture profile (story 1.1). Never edit through Decap.
+name: Edgar Ferreira
+role: Product Engineer
+location: Aracaju, Sergipe, Brazil
+heroTitle: Product Engineer
+heroTagline: Designs digital products end-to-end, combining strategy, design thinking, and engineering so each release is measurable.
+portrait: /uploads/seed-portrait.png
+portraitAlt: Portrait of Edgar Ferreira
+bio: |
+  Hello! I'm **Edgar Ferreira**, a product engineer from Aracaju, Brazil.
+
+  With over **5 years**, I work from discovery through launch.
+technologies:
+  - Oracle APEX (Apps, Reports, Forms)
+  - API Design (REST)
+  - Design Systems
+whatIDo:
+  - Lead discovery and UX research to align problems with measurable outcomes
+  - Prototype and ship full-stack features
+education:
+  - Systems Analysis and Development
+  - Product Design (Design Circuit)
+certifications:
+  - year: 2021
+    title: Oracle Cloud Foundations (Oracle)
+  - year: 2021
+    title: Oracle APEX Developer (Oracle)
+experience:
+  - company: Seed Current Company
+    role: Oracle APEX Developer
+    startOn: 2025-03
+  - company: Seed Past Company
+    role: PHP Developer
+    startOn: 2023-09
+    endOn: 2023-11
+  - company: Seed First Company
+    role: Oracle APEX Developer
+    startOn: 2018-07
+    endOn: 2021-04
+experienceSummary: 5+ years across product engineering, UX, and Oracle APEX
+contact:
+  phone: (79) 90000-0000
+  email: seed@example.com
+  website: https://edgar-ferreira.com
+  languages: Portuguese (Native) · English (Professional)
+links:
+  - label: Portfolio
+    url: https://edgar-ferreira.com
+    icon: portfolio
+    showInHero: true
+    showInContact: true
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/seed
+    icon: linkedin
+    showInHero: true
+    showInContact: true
+  - label: GitHub
+    url: https://github.com/seed
+    icon: github
+    showInHero: false
+    showInContact: true
+  - label: Email (Personal)
+    url: mailto:seed@example.com
+    icon: email
+    showInHero: true
+    showInContact: true

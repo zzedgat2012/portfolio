@@ -1,4 +1,16 @@
-export type { ContentModel, FileModel, FolderModel } from './content-model';
+export type { ArticleFile } from './article-file';
+export { articleFileSchema } from './article-file';
+export type { ContentModel, FileModel, FolderModel, RelationModel } from './content-model';
 export { contentModel } from './content-model';
+export type { LinkIcon, ProfileFile } from './profile-file';
+export { LINK_ICONS, profileFileSchema } from './profile-file';
+export type { ProjectFile } from './project-file';
+export { projectFileSchema } from './project-file';
+export type { RedirectsFile } from './redirects-file';
+export { redirectsFileSchema } from './redirects-file';
+export type { RelationEntry } from './relations';
+export { listBrokenRelations } from './relations';
 export type { SiteSettingsFile } from './site-settings-file';
 export { siteSettingsFileSchema } from './site-settings-file';
+export type { TagFile } from './tag-file';
+export { tagFileSchema } from './tag-file';
