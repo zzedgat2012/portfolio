@@ -1,29 +1,130 @@
-# Placeholder (story 1.1): the WordPress migrator overwrites this file in story 1.2.
 name: Edgar Ferreira
 role: Product Engineer
 location: Aracaju, Sergipe, Brazil
 heroTitle: Product Engineer
-heroTagline: Placeholder tagline, replaced by the WordPress import.
-portrait: /uploads/portrait.jpg
+heroTagline: I design digital products end-to-end — translating strategy into experiences, pairing design thinking with engineering rigor, and ensuring every release is measurable and impactful.
+portrait: /uploads/profile.jpg
 portraitAlt: Portrait of Edgar Ferreira
-bio: Placeholder bio, replaced by the WordPress import.
+bio: |-
+  Hello! I'm **Edgar Ferreira**, a product engineer from Aracaju, Brazil, dedicated to crafting experiences that connect strategy, design, and technology.
+
+  With over **5+ years of experience**, From early discovery to launch, I partner with founders and teams to define requirements, prototype flows, and lead implementation across APEX apps, APIs, and data models. I've shipped work for finance, logistics, and media companies, with a stronger focus on the Oracle ecosystem.
+
+  Curiosity keeps me multidisciplinary. Whether I'm mapping journeys with UX research, refining handoffs in Figma, or orchestrating delivery with CI/CD and observability, my goal is simple: deliver products that feel intentional and hold up in production — now with a focus on Oracle platforms.
 technologies:
-  - Oracle APEX
+  - Oracle APEX (Apps, Reports, Forms)
+  - Oracle Database (SQL/PLSQL)
+  - Oracle Cloud Infrastructure (OCI)
+  - Oracle Fusion Cloud (Integrations)
+  - API Design (REST)
+  - Oracle + Legacy Integrations
+  - Performance & Data Modeling
+  - Security & Access (Roles/Grants)
+  - CI/CD (Jenkins, GitHub Actions)
+  - Observability (Grafana, Sentry)
+  - Strategy Workshops
+  - Stakeholder Alignment
+  - Product Discovery
+  - UX Research
+  - Design Systems
 whatIDo:
-  - Placeholder, replaced by the WordPress import.
+  - Lead discovery and UX research to align problem statements with measurable outcomes
+  - Prototype and ship full-stack features across web dashboards, APIs, and native clients
+  - Facilitate cross-functional collaboration between design, engineering, and stakeholders
+  - Instrument releases with analytics and monitoring to inform the product roadmap
+education:
+  - Systems Analysis and Development
+  - Product Design (Design Circuit)
+certifications:
+  - year: 2021
+    title: Oracle Cloud Foundations (Oracle)
+  - year: 2021
+    title: Oracle APEX Developer (Oracle)
 experience:
-  - company: Placeholder
-    role: Product Engineer
+  - company: Memora Processos Inovadores
+    role: Oracle APEX Developer
     startOn: 2025-03
-experienceSummary: Placeholder, replaced by the WordPress import.
+  - company: Serigy
+    role: Head of Technology
+    startOn: 2023-11
+  - company: WW Software
+    role: PHP Developer
+    startOn: 2023-09
+    endOn: 2023-11
+  - company: Minha ISA
+    role: Oracle APEX Developer
+    startOn: 2022-12
+    endOn: 2023-09
+  - company: Minha ISA
+    role: Oracle APEX Developer
+    startOn: 2022-04
+    endOn: 2022-06
+  - company: EightSystems
+    role: Oracle APEX Developer
+    startOn: 2018-07
+    endOn: 2021-04
+  - company: EightSystems
+    role: Oracle APEX Developer
+    startOn: 2018-01
+    endOn: 2018-07
+  - company: EightSystems
+    role: Oracle APEX Developer
+    startOn: 2017-08
+    endOn: 2017-10
+experienceSummary: 5+ years across product engineering, UX, and Oracle APEX development
 contact:
-  phone: Placeholder
-  email: contact@edgar-ferreira.com
+  phone: (79) 98835-9686
+  email: efsn88@gmail.com
   website: https://edgar-ferreira.com
-  languages: Portuguese (Native) · English (Professional)
+  languages: Portuguese (Native), English (Professional)
 links:
+  - label: Email (Personal)
+    url: mailto:efsn88@gmail.com
+    icon: email
+    showInHero: false
+    showInContact: true
+  - label: Portfolio
+    url: https://github.com/zzedgat2012
+    icon: portfolio
+    showInHero: true
+    showInContact: false
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/efsn88
+    icon: linkedin
+    showInHero: true
+    showInContact: true
+  - label: GitHub
+    url: https://github.com/efsn
+    icon: github
+    showInHero: false
+    showInContact: true
   - label: Portfolio
     url: https://edgar-ferreira.com
     icon: portfolio
-    showInHero: true
+    showInHero: false
     showInContact: true
+  - label: WhatsApp
+    url: https://wa.me/5579988359686
+    icon: whatsapp
+    showInHero: false
+    showInContact: true
+  - label: Email (Business)
+    url: mailto:contato@edgar-ferreira.com
+    icon: email
+    showInHero: false
+    showInContact: true
+  - label: Email
+    url: mailto:edgar@serigy.net
+    icon: email
+    showInHero: true
+    showInContact: false
+  - label: Facebook
+    url: https://www.facebook.com/efsn88
+    icon: facebook
+    showInHero: true
+    showInContact: false
+  - label: Instagram
+    url: https://www.instagram.com/edgar.ferreira95/
+    icon: instagram
+    showInHero: true
+    showInContact: false

@@ -1,0 +1,11 @@
+{
+  "extends": "@portfolio/config/tsconfig.node.json",
+  // DOM types: turndown's API is typed with DOM nodes (it runs on domino in Node).
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "noEmit": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"]
+}

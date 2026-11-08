@@ -29,6 +29,8 @@
       "!apps/web/next-env.d.ts",
       // Decap media and the pinned admin page
       "!apps/web/public/uploads",
+      // recorded WordPress responses (story 1.2): kept byte-for-byte as fetched
+      "!packages/migrator/fixtures",
       // Playwright output
       "!apps/web/playwright-report",
       "!apps/web/test-results",
