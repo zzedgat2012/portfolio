@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "open-pencil": {
+      "command": "openpencil-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}

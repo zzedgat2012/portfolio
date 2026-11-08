@@ -1,1 +1,0 @@
-export { renderBlock } from './registry';
