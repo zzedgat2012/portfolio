@@ -13,12 +13,15 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
-    "e2e": "turbo test:e2e"
+    "e2e": "turbo test:e2e",
+    "cms:local": "PORT=8081 decap-server",
+    "wrangler": "pnpm --filter decap-auth exec wrangler"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
     "turbo": "2.11.10",
     "typescript": "7.0.2",
-    "vitest": "5.1.0"
+    "vitest": "5.1.0",
+    "decap-server": "3.11.6"
   }
 }

@@ -1,0 +1,28 @@
+// GitHub OAuth proxy for the Decap admin (docs/conventions.md › Decap rules).
+// Served only at https://auth.edgar-ferreira.com (Workers custom domain; DNS managed by Cloudflare).
+// Setup once:
+//   1. GitHub OAuth app callback URL = https://auth.edgar-ferreira.com/callback
+//   2. pnpm --filter decap-auth deploy
+//   3. pnpm wrangler secret put GITHUB_CLIENT_SECRET   (paste the OAuth app's client secret)
+//   4. apps/web/public/admin/config.yml › backend.base_url = https://auth.edgar-ferreira.com
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portfolio-decap-auth",
+  // Efsn88@pm.me's Account (owns the edgar-ferreira.com zone); pinned so a login with
+  // several accounts never deploys elsewhere. Not a secret.
+  "account_id": "86dd3c836ae52e572ce13a51e3d63390",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "auth.edgar-ferreira.com", "custom_domain": true }],
+  "vars": {
+    "GITHUB_CLIENT_ID": "Ov23liOrcBPbRo9ctJIw",
+    // Origins whose /admin/ may receive the token. Comma-separated, no trailing slash.
+    // The workers.dev origin is for checking the new site before the apex cut-over; remove it after.
+    "ALLOWED_ORIGINS": "https://edgar-ferreira.com, https://portfolio-web.efsn88.workers.dev"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

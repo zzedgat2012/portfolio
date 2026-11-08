@@ -1,0 +1,47 @@
+# Decap CMS content model (docs/conventions.md › Decap CMS patterns).
+# Mirrors contentModel in packages/contracts; apps/web/src/shared/content/content-model.test.ts
+# fails if collections, fields or required-ness drift. Never put secrets in this file: it is public.
+
+backend:
+  name: github
+  repo: zzedgat2012/portfolio
+  branch: main
+  # apps/decap-auth Worker (GitHub OAuth). No trailing slash: Decap compares it to the popup origin.
+  base_url: https://auth.edgar-ferreira.com
+  auth_endpoint: auth
+  commit_messages:
+    create: 'content: create {{collection}} "{{slug}}"'
+    update: 'content: update {{collection}} "{{slug}}"'
+    delete: 'content: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'content: upload "{{path}}"'
+    deleteMedia: 'content: delete "{{path}}"'
+
+# On localhost only: talk to `pnpm cms:local` (decap-server) and write to the working tree.
+local_backend: true
+
+# Drafts are branches/PRs; main only holds published content.
+publish_mode: editorial_workflow
+
+media_folder: apps/web/public/uploads
+public_folder: /uploads
+
+collections:
+  - name: settings
+    label: Settings
+    editor:
+      preview: false
+    files:
+      - name: site
+        label: Site
+        file: content/settings/site.yml
+        fields:
+          - name: siteName
+            label: Site name
+            widget: string
+            pattern: ["^.{1,80}$", "Between 1 and 80 characters"]
+          - name: description
+            label: Description
+            hint: Used for search results and link previews.
+            widget: text
+            required: false
+            pattern: ['^[\s\S]{0,160}$', "At most 160 characters"]

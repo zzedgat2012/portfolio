@@ -2,6 +2,6 @@ packages:
   - apps/*
   - packages/*
 allowBuilds:
-  "@swc/core": true
-  core-js-pure: true
   esbuild: true
+  sharp: true
+  workerd: true

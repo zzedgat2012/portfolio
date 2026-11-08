@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { AppError, CmsUnavailableError, NotFoundError, ValidationError } from './errors';
+import { AppError, NotFoundError, ValidationError } from './errors';
 
 describe('AppError', () => {
   test('extends Error', () => {
@@ -31,21 +31,5 @@ describe('ValidationError', () => {
     expect(error).toBeInstanceOf(AppError);
     expect(error.message).toBe('Invalid slug');
     expect(error.name).toBe('ValidationError');
-  });
-});
-
-describe('CmsUnavailableError', () => {
-  test('extends AppError with status and path', () => {
-    const error = new CmsUnavailableError(503, '/api/projects');
-    expect(error).toBeInstanceOf(AppError);
-    expect(error.status).toBe(503);
-    expect(error.path).toBe('/api/projects');
-    expect(error.name).toBe('CmsUnavailableError');
-  });
-
-  test('includes status and path in the message', () => {
-    const error = new CmsUnavailableError(404, '/api/pages/home');
-    expect(error.message).toContain('404');
-    expect(error.message).toContain('/api/pages/home');
   });
 });

@@ -17,8 +17,8 @@ max_line_length = 100
 trim_trailing_whitespace = false
 max_line_length = off
 
-# Strapi content-type schemas, lockfiles and generated files keep the tool's own layout.
-[{**/schema.json,pnpm-lock.yaml,apps/cms/types/generated/**}]
+# Lockfiles, Decap config and content files keep the tool's own layout.
+[{pnpm-lock.yaml,apps/web/public/admin/config.yml,content/**}]
 max_line_length = off
 
 # Environment files: never strip whitespace that may be part of a value.

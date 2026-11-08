@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* Design tokens from DESIGN.md — the bridge between the mockups and the code.
+   Colors, fonts, and radius are the ones used across every screen.        */
+@theme {
+  /* Typography (DESIGN.md › Typography); families self-hosted by next/font in layout.tsx */
+  --font-mono: var(--font-fira-code), "Fira Code", ui-monospace, monospace;
+  --font-sans: var(--font-open-sans), "Open Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Colors (DESIGN.md › Colors) */
+  --color-background: #121212;
+  --color-foreground: #f5f5f5;
+  --color-card: #3d3d3d;
+  --color-card-foreground: #f5f5f5;
+  --color-primary: #f5f5f5;
+  --color-primary-foreground: #121212;
+  --color-secondary: #3d3d3d;
+  --color-secondary-foreground: #f5f5f5;
+  --color-muted-foreground: #a8a8a8;
+  --color-accent: #a8a8a8;
+  --color-accent-foreground: #121212;
+  --color-destructive: #b91c1c;
+  --color-destructive-foreground: #f5f5f5;
+  --color-border: #3d3d3d;
+  --color-input: #3d3d3d;
+  --color-ring: #a8a8a8;
+
+  /* Radius (DESIGN.md › Shapes) */
+  --radius-base: 16px;
+  --radius-lg: 16px;
+  --radius-md: 14px;
+  --radius-sm: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-slide: 40px;
+  --radius-code: 4px;
+}
+
+html,
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}

@@ -1,0 +1,3 @@
+# Fixture content for Playwright (CONTENT_DIR=e2e/content). Never edit through Decap.
+siteName: Edgar Ferreira
+description: Fixture site used by the end-to-end tests.

@@ -1,0 +1,21 @@
+// Cloudflare Workers static assets: serves the Next.js static export.
+//   pnpm --filter web deploy     next build + wrangler deploy
+//   pnpm exec wrangler dev       serve out/ locally exactly as in production (used by Playwright)
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portfolio-web",
+  // Efsn88@pm.me's Account (owns the edgar-ferreira.com zone). Not a secret.
+  "account_id": "86dd3c836ae52e572ce13a51e3d63390",
+  // Until cut-over the site is only on workers.dev. edgar-ferreira.com and www still serve the
+  // WordPress site (Cloudflare Tunnel CNAMEs). At cut-over, add:
+  //   "routes": [{ "pattern": "edgar-ferreira.com", "custom_domain": true }]
+  // and redirect www to the apex.
+  "workers_dev": true,
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./out",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "observability": { "enabled": true }
+}

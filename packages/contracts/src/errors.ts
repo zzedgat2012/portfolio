@@ -27,13 +27,3 @@ export class ValidationError extends AppError {
     super(message, 'VALIDATION_ERROR');
   }
 }
-
-/** Thrown when the CMS is unreachable or returns a non-2xx status. */
-export class CmsUnavailableError extends AppError {
-  constructor(
-    public readonly status: number,
-    public readonly path: string,
-  ) {
-    super(`CMS responded with status ${status} for ${path}`, 'CMS_UNAVAILABLE');
-  }
-}

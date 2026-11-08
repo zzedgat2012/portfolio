@@ -13,13 +13,15 @@ build/
 .turbo/
 coverage/
 
-# Strapi
-apps/cms/.strapi/
-apps/cms/.cache/
-apps/cms/.tmp/
-apps/cms/.strapi-updater.json
-apps/cms/public/uploads/*
-!apps/cms/public/uploads/.gitkeep
+# Next.js (static export in out/)
+apps/web/.next/
+apps/web/out/
+apps/web/next-env.d.ts
+*.tsbuildinfo
+
+# Cloudflare Wrangler (local state and dev secrets)
+.wrangler/
+.dev.vars
 
 # Playwright
 apps/web/playwright-report/
@@ -27,8 +29,6 @@ apps/web/test-results/
 apps/web/blob-report/
 apps/web/playwright/.cache/
 
-# React Router generated types
-apps/web/.react-router/
 
 # original WordPress theme: local reference only (see AGENTS.md › Legacy WordPress reference)
 external/

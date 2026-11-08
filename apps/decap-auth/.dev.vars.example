@@ -1,0 +1,2 @@
+# Copy to .dev.vars (git-ignored) for `pnpm --filter decap-auth dev`.
+GITHUB_CLIENT_SECRET=
