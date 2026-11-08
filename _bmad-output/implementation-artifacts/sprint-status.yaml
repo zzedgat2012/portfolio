@@ -1,0 +1,21 @@
+# Sprint status: site migration (generated 2026-11-08)
+# Statuses: backlog | ready-for-dev | in-progress | review | done
+# Note: stories run in separate agent sessions following AGENTS.md (one story per session).
+# /bmad-build itself was not used: its loader needs `uv` (not installed) and stops for human input.
+project: portfolio
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts/stories
+development_status:
+  epic-1: in-progress
+  1-1-content-model: ready-for-dev
+  1-2-wordpress-migrator: ready-for-dev
+  epic-2: backlog
+  2-1-site-shell: ready-for-dev
+  2-2-home-page: ready-for-dev
+  2-3-project-page: ready-for-dev
+  2-4-article-page: ready-for-dev
+  2-5-cv-page-pdf: ready-for-dev
+  epic-3: backlog
+  3-1-seo-feeds-redirects: ready-for-dev
+  3-2-ci-cd: ready-for-dev
+  3-3-cut-over: ready-for-dev
