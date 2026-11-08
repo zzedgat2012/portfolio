@@ -15,7 +15,7 @@
     "test": "turbo test",
     "e2e": "turbo test:e2e",
     "cms:local": "PORT=8081 decap-server",
-    "wrangler": "pnpm --filter decap-auth exec wrangler"
+    "auth:secret": "pnpm --filter decap-auth exec wrangler secret put GITHUB_CLIENT_SECRET"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",

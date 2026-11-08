@@ -66,7 +66,8 @@ pnpm turbo lint typecheck test         # must pass before any commit (lint = bio
 pnpm --filter web build                # static export to apps/web/out; fails on any invalid content file
 pnpm --filter web deploy               # wrangler deploy of apps/web/out (CI on merge to main)
 pnpm --filter decap-auth deploy        # wrangler deploy of the OAuth proxy
-pnpm wrangler <cmd>                    # Wrangler from the root (login, whoami, secret put…); never `pnpm add -w wrangler`
+pnpm --filter <app> exec wrangler <cmd>   # Wrangler for one app (web | decap-auth); never `pnpm add -w wrangler`
+pnpm -w auth:secret                    # set GITHUB_CLIENT_SECRET on portfolio-decap-auth, from any folder
 pnpm --filter web test:e2e             # Playwright, against a production build of the e2e content fixtures
 ```
 
