@@ -1,0 +1,7 @@
+/* CV print layout (story 2.5): A4 with margins. Imported by app/cv/page.tsx only, so printing any
+   other page keeps the browser defaults. The light colors come from [data-theme="print"]
+   in globals.css. */
+@page {
+  size: A4;
+  margin: 15mm;
+}

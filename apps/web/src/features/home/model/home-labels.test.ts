@@ -1,11 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { Experience } from '@/features/profile';
-import {
-  toExperienceRow,
-  toHeroTitleParts,
-  toProjectCountLabel,
-  toWebsiteLabel,
-} from './home-labels';
+import { toExperienceRow, toHeroTitleParts, toProjectCountLabel } from './home-labels';
 
 describe('[story 2.2] home labels', () => {
   test('toHeroTitleParts splits the hero title after the first word', () => {
@@ -47,12 +42,6 @@ describe('[story 2.2] home labels', () => {
       detail: '2 years 10 months',
       isCurrent: false,
     });
-  });
-
-  test('toWebsiteLabel drops the protocol, www-less host kept, and trailing slash', () => {
-    expect(toWebsiteLabel('https://edgar-ferreira.com')).toBe('edgar-ferreira.com');
-    expect(toWebsiteLabel('https://edgar-ferreira.com/')).toBe('edgar-ferreira.com');
-    expect(toWebsiteLabel('http://example.com/path/')).toBe('example.com/path');
   });
 
   test('toProjectCountLabel pluralises', () => {

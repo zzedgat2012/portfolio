@@ -12,3 +12,4 @@ export {
   toLongDateLabel,
   toYearMonthLabel,
 } from './date-labels';
+export { toWebsiteLabel } from './website-label';

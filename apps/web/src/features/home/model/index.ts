@@ -11,5 +11,4 @@ export {
   toExperienceRow,
   toHeroTitleParts,
   toProjectCountLabel,
-  toWebsiteLabel,
 } from './home-labels';

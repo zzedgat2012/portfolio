@@ -34,11 +34,6 @@ export function toExperienceRow(experience: Experience): ExperienceRow {
   };
 }
 
-/** `https://edgar-ferreira.com/` → `edgar-ferreira.com`. */
-export function toWebsiteLabel(url: string): string {
-  return url.replace(/^https?:\/\//, '').replace(/\/+$/, '');
-}
-
 export function toProjectCountLabel(count: number): string {
   return `${count} project${count === 1 ? '' : 's'}`;
 }

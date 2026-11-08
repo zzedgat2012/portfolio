@@ -3,13 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "next build && tsx scripts/postbuild.ts",
     "dev": "next dev --port 3000",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "lint": "biome check .",
     "test:e2e": "playwright test",
-    "deploy": "next build && wrangler deploy"
+    "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
     "@portfolio/contracts": "workspace:*",
@@ -35,6 +35,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "tailwindcss": "4.3.5",
+    "tsx": "4.23.15",
     "typescript": "^5.9.3",
     "vitest": "5.1.0",
     "wrangler": "4.158.0"

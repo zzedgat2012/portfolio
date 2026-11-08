@@ -14,7 +14,7 @@ development_status:
   2-2-home-page: review
   2-3-project-page: review
   2-4-article-page: review
-  2-5-cv-page-pdf: ready-for-dev
+  2-5-cv-page-pdf: review
   epic-3: backlog
   3-1-seo-feeds-redirects: ready-for-dev
   3-2-ci-cd: ready-for-dev

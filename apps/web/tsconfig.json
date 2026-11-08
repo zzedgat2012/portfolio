@@ -16,6 +16,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "e2e/**/*.ts",
+    "scripts/**/*.ts",
     "*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"

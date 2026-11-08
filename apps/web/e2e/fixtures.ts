@@ -1,5 +1,6 @@
 import { test as base } from '@playwright/test';
 import { ArticlePage } from './pages/article-page';
+import { CvPage } from './pages/cv-page';
 import { HomePage } from './pages/home-page';
 import { NotFoundPage } from './pages/not-found-page';
 import { ProjectPage } from './pages/project-page';
@@ -7,6 +8,7 @@ import { SiteShell } from './pages/site-shell';
 
 type Fixtures = {
   articlePage: ArticlePage;
+  cvPage: CvPage;
   homePage: HomePage;
   notFoundPage: NotFoundPage;
   projectPage: ProjectPage;
@@ -16,6 +18,9 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   articlePage: async ({ page }, use) => {
     await use(new ArticlePage(page));
+  },
+  cvPage: async ({ page }, use) => {
+    await use(new CvPage(page));
   },
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));

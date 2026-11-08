@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { type Profile, type ProfileLink, ProfileLinkIcon } from '@/features/profile';
+import { toWebsiteLabel } from '@/shared/lib';
 import { Container, SectionEyebrow } from '@/shared/ui';
-import { toWebsiteLabel } from '../model';
 
 type ContactSectionProps = {
   profile: Pick<Profile, 'name' | 'role' | 'location' | 'contact'>;

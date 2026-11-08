@@ -36,6 +36,13 @@
   --color-code-surface: #1e1e1e;
   --color-code-ink: #d4d4d4;
 
+  /* Light print theme (story 2.5, CV mockup), from the palette above: white paper, the
+     dark background as ink, card grey for secondary text, accent grey for rules. */
+  --color-paper: #ffffff;
+  --color-ink: #121212;
+  --color-ink-muted: #3d3d3d;
+  --color-ink-rule: #a8a8a8;
+
   /* Letter spacing (DESIGN.md › Typography: eyebrow, meta-caps) */
   --tracking-eyebrow: 0.8em;
   --tracking-meta: 0.35em;
@@ -67,4 +74,16 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-ring);
   outline-offset: 2px;
+}
+
+/* Light print theme (story 2.5): the CV page (`<main data-theme="print">`) remaps the semantic
+   colors, so shared components (Markdown, …) render dark-on-white without their own variants.
+   Scoped to :root so the page background and the PDF's @page margins are white too. */
+:root:has([data-theme="print"]) {
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-muted-foreground: var(--color-ink-muted);
+  --color-accent: var(--color-ink-muted);
+  --color-border: var(--color-ink-rule);
+  --color-ring: var(--color-ink-muted);
 }

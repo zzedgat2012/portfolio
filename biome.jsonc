@@ -222,8 +222,8 @@
       }
     },
     {
-      // CLI scripts: the migrator reports progress on stdout.
-      "includes": ["packages/migrator/**"],
+      // CLI scripts: the migrator and the web postbuild steps report progress on stdout.
+      "includes": ["packages/migrator/**", "apps/web/scripts/**"],
       "linter": {
         "rules": {
           "suspicious": { "noConsole": "off" }
