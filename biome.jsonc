@@ -32,6 +32,8 @@
       // Playwright output
       "!apps/web/playwright-report",
       "!apps/web/test-results",
+      // React Router generated types (typegen output)
+      "!apps/web/.react-router",
       // BMAD framework install and its generated artifacts
       "!_bmad",
       "!_bmad-output",
