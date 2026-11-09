@@ -18,7 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${firaCode.variable} ${openSans.variable}`}>
+    // `data-scroll-behavior="smooth"`: Next turns the CSS smooth scrolling off during route changes,
+    // so a new page opens at the top instantly while in-page anchors still scroll smoothly.
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${firaCode.variable} ${openSans.variable}`}
+    >
       <body className="flex min-h-screen flex-col antialiased">{children}</body>
     </html>
   );

@@ -9,6 +9,7 @@ export { ExternalLinkButton } from './ExternalLinkButton';
 export { HighlightedMarkdown } from './HighlightedMarkdown';
 export { JsonLd } from './JsonLd';
 export { Markdown } from './Markdown';
+export { ReadingProgress } from './ReadingProgress';
 export { SectionDisplayHeading } from './SectionDisplayHeading';
 export { SectionEyebrow } from './SectionEyebrow';
 export { SkipLink } from './SkipLink';

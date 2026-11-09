@@ -71,4 +71,11 @@ export class HomePage {
       has: this.page.getByRole('heading', { name: title }),
     });
   }
+
+  /** Follows the "Read more" link of a project card in the `#projects` section. */
+  async openProject(title: string): Promise<void> {
+    await this.projectCard(title)
+      .getByRole('link', { name: `Read more about ${title}` })
+      .click();
+  }
 }

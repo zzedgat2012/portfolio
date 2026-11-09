@@ -9,7 +9,7 @@ import { getProfile } from '@/features/profile';
 import { buildArticleJsonLd } from '@/features/seo';
 import { getSiteSettings } from '@/features/settings';
 import { buildAbsoluteUrl, buildPageMetadata } from '@/shared/lib';
-import { JsonLd } from '@/shared/ui';
+import { JsonLd, ReadingProgress } from '@/shared/ui';
 
 type ArticleRouteProps = { params: Promise<{ slug: string }> };
 
@@ -50,6 +50,7 @@ export default async function ArticleRoute({ params }: ArticleRouteProps) {
   return (
     <>
       <JsonLd data={buildArticleJsonLd(article, profile, settings.siteUrl)} />
+      <ReadingProgress />
       <ArticleDetail
         article={article}
         author={profile}

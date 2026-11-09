@@ -12,6 +12,7 @@ export {
   toLongDateLabel,
   toYearMonthLabel,
 } from './date-labels';
+export { toScrollProgress } from './scroll-progress';
 export type { JsonLd } from './serialize-json-ld';
 export { serializeJsonLd } from './serialize-json-ld';
 export { toWebsiteLabel } from './website-label';

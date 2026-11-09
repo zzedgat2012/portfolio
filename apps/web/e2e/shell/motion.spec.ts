@@ -1,0 +1,102 @@
+import { expect, test } from '../fixtures';
+
+test.describe('[story 4.1] Smooth scrolling', () => {
+  test('scrolls anchor links smoothly', async ({ page, siteShell }) => {
+    await siteShell.open();
+
+    await expect(page.locator('html')).toHaveCSS('scroll-behavior', 'smooth');
+  });
+});
+
+test.describe('[story 4.1] Smooth scrolling under reduced motion', () => {
+  test.use({ reducedMotion: 'reduce' });
+
+  test('jumps to anchors instead of scrolling smoothly', async ({ page, siteShell }) => {
+    await siteShell.open();
+
+    await expect(page.locator('html')).toHaveCSS('scroll-behavior', 'auto');
+  });
+});
+
+test.describe('[story 4.1] Custom scrollbar', () => {
+  // Chromium ignores `::-webkit-scrollbar` once `scrollbar-width` is set, so the thin scrollbar is
+  // drawn by the webkit rules there and the standard properties are kept for Firefox only.
+  test('ships thin webkit scrollbar rules with a thumb hover state', async ({
+    page,
+    siteShell,
+  }) => {
+    await siteShell.open();
+
+    const selectors = await siteShell.styleRuleSelectors();
+    expect(selectors.some((selector) => selector.includes('::-webkit-scrollbar'))).toBe(true);
+    expect(selectors.some((selector) => selector.includes('::-webkit-scrollbar-thumb:hover'))).toBe(
+      true,
+    );
+    await expect(page.locator('html')).not.toHaveCSS('scrollbar-width', 'thin');
+  });
+});
+
+test.describe('[story 4.1] Page transitions', () => {
+  test('keeps the header out of the page transition', async ({ siteShell }) => {
+    await siteShell.open();
+
+    await expect(siteShell.banner).toHaveCSS('view-transition-name', 'site-header');
+  });
+
+  test('ships the page transition styles', async ({ siteShell }) => {
+    await siteShell.open();
+
+    const selectors = await siteShell.styleRuleSelectors();
+    expect(selectors.some((selector) => selector.includes('::view-transition-new'))).toBe(true);
+    expect(selectors.some((selector) => selector.includes('::view-transition-old'))).toBe(true);
+  });
+
+  test('still lands on the project after following a project card @smoke', async ({
+    page,
+    homePage,
+    projectPage,
+  }) => {
+    await homePage.open();
+
+    await homePage.openProject('Seed featured project');
+
+    await expect(page).toHaveURL(/\/project\/seed-featured-project\/$/);
+    await expect(projectPage.heading).toHaveText('Seed featured project');
+  });
+});
+
+test.describe('[story 4.1] Page transitions when navigating', () => {
+  test('fades the new page in, rising, after following a project card', async ({
+    homePage,
+    projectPage,
+    siteShell,
+  }) => {
+    await siteShell.recordPageTransitions();
+    await homePage.open();
+
+    await homePage.openProject('Seed featured project');
+
+    await expect(projectPage.heading).toHaveText('Seed featured project');
+    await expect
+      .poll(() => siteShell.recordedPageTransitions())
+      .toContainEqual(expect.stringMatching(/^::view-transition-new\(.+\) page-rise-in 300$/));
+  });
+});
+
+// Headless Chromium runs no view-transition animation under emulated reduced motion even without
+// the CSS opt-out, so a recorded-animation check cannot fail there; the opt-out rules are read
+// from the CSSOM instead.
+test.describe('[story 4.1] Page transitions under reduced motion', () => {
+  test('turns the page transition animations off', async ({ siteShell }) => {
+    await siteShell.open();
+
+    const selectors = await siteShell.styleRuleSelectors('prefers-reduced-motion: reduce');
+    for (const pseudo of ['group', 'old', 'new']) {
+      // Chromium serializes `(.page)` as `(*.page)`.
+      expect(selectors).toContainEqual(
+        expect.stringMatching(new RegExp(`::view-transition-${pseudo}\\(\\*?\\.page\\)`)),
+      );
+      expect(selectors).toContainEqual(expect.stringContaining(`::view-transition-${pseudo}(*)`));
+    }
+  });
+});

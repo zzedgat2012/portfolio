@@ -9,7 +9,7 @@ import {
 import { buildProjectJsonLd } from '@/features/seo';
 import { getSiteSettings } from '@/features/settings';
 import { buildPageMetadata } from '@/shared/lib';
-import { JsonLd } from '@/shared/ui';
+import { JsonLd, ReadingProgress } from '@/shared/ui';
 
 type ProjectRouteProps = { params: Promise<{ slug: string }> };
 
@@ -44,6 +44,7 @@ export default async function ProjectRoute({ params }: ProjectRouteProps) {
   return (
     <>
       <JsonLd data={buildProjectJsonLd(project, profile, settings.siteUrl)} />
+      <ReadingProgress />
       <ProjectDetail project={project} />
     </>
   );

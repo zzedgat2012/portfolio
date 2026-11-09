@@ -57,6 +57,10 @@
   --radius-slide: 40px;
   --radius-code: 4px;
 
+  /* Motion (DESIGN.md › Elevation & Depth › Movimento): standard curve, page transition length */
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-page: 300ms;
+
   /* Elevation (DESIGN.md › Elevation & Depth) */
   --shadow-glow: 0 0 20px rgb(166 166 166 / 0.15);
   --shadow-slide: 0 20px 60px rgba(0, 0, 0, 0.45);
@@ -68,6 +72,99 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+}
+
+/* Smooth anchor scrolling (DESIGN.md › Movimento); `auto` under reduced motion, below. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Thin root scrollbar (DESIGN.md › Movimento): track `background`, thumb `border` with `full`
+   radius, thumb `muted-foreground` on hover. Chromium (121+) ignores `::-webkit-scrollbar` once
+   `scrollbar-width`/`scrollbar-color` are set, so the standard properties apply only where the
+   webkit pseudo-elements are unsupported (Firefox, which has no hover state). Story 4.1. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-background);
+  }
+}
+
+html::-webkit-scrollbar {
+  width: calc(var(--spacing) * 2);
+  height: calc(var(--spacing) * 2);
+}
+
+html::-webkit-scrollbar-track {
+  background-color: var(--color-background);
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: calc(infinity * 1px);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-muted-foreground);
+}
+
+/* Page transition (DESIGN.md › Movimento): the old page fades out, the new one fades in rising
+   from 8px. `(site)/layout.tsx` gives the page content the `page` class; the header keeps its own
+   `site-header` name and does not animate. Clicks pass through the transition overlay. */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page) {
+  animation: var(--duration-page) var(--ease-standard) both page-fade-out;
+}
+
+::view-transition-new(.page) {
+  animation: var(--duration-page) var(--ease-standard) both page-rise-in;
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Reduced motion: no page transition, anchors jump. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* `(*)` also stops the browser's default root crossfade; `(.page)` is listed because it is more
+     specific than `(*)` and would otherwise keep its animation. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(.page),
+  ::view-transition-old(.page),
+  ::view-transition-new(.page) {
+    animation: none;
+  }
 }
 
 /* focus-ring (DESIGN.md › Components): 2px `ring`, offset 2px */
