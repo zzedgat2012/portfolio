@@ -123,6 +123,22 @@ html::-webkit-scrollbar-thumb:hover {
   animation: var(--duration-page) var(--ease-standard) both page-rise-in;
 }
 
+/* Full page loads (the header's `/#…` anchors, the CV page, reloads) are cross-document
+   navigations: the same motion runs on everything but the header. The `page-load` type keeps it
+   off soft navigations, where `.page` above already moves the content. */
+@view-transition {
+  navigation: auto;
+  types: page-load;
+}
+
+html:active-view-transition-type(page-load)::view-transition-old(root) {
+  animation: var(--duration-page) var(--ease-standard) both page-fade-out;
+}
+
+html:active-view-transition-type(page-load)::view-transition-new(root) {
+  animation: var(--duration-page) var(--ease-standard) both page-rise-in;
+}
+
 ::view-transition-group(site-header) {
   animation: none;
   z-index: 100;
@@ -164,6 +180,11 @@ html::-webkit-scrollbar-thumb:hover {
   ::view-transition-old(.page),
   ::view-transition-new(.page) {
     animation: none;
+  }
+
+  /* Full page loads swap instantly. */
+  @view-transition {
+    navigation: none;
   }
 }
 

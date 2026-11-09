@@ -100,3 +100,58 @@ test.describe('[story 4.1] Page transitions under reduced motion', () => {
     }
   });
 });
+
+test.describe('[story 4.1] Page transitions as one page', () => {
+  test('moves the whole page content as one piece after following a project card', async ({
+    homePage,
+    projectPage,
+    siteShell,
+  }) => {
+    await siteShell.recordPageTransitions();
+    await homePage.open();
+
+    await homePage.openProject('Seed featured project');
+
+    await expect(projectPage.heading).toHaveText('Seed featured project');
+    await expect
+      .poll(() => siteShell.recordedPageTransitions())
+      .toContainEqual(expect.stringMatching(/ page-rise-in 300$/));
+    const pageAnimations = (await siteShell.recordedPageTransitions()).filter((entry) =>
+      / page-(rise-in|fade-out) /.test(entry),
+    );
+    expect(pageAnimations.filter((entry) => entry.includes('page-rise-in'))).toHaveLength(1);
+    expect(pageAnimations.filter((entry) => entry.includes('page-fade-out'))).toHaveLength(1);
+  });
+});
+
+test.describe('[story 4.1] Page transitions on full page loads', () => {
+  // The header section links are plain anchors to `/#…`, so from an article they load a new
+  // document: the cross-document view transition runs the page motion on the root. Headless
+  // Chromium skips some cross-document snapshots at random (pagereveal without a viewTransition,
+  // also when run serially), so the opt-in is read from the CSSOM instead of recorded animations.
+  test('opts every page into the page motion on full page loads', async ({ articlePage, page }) => {
+    await articlePage.openArticle('seed-another-article');
+
+    const optIn = await page.evaluate(() =>
+      Array.from(document.styleSheets)
+        .flatMap((sheet) => Array.from(sheet.cssRules))
+        .filter((rule) => rule.cssText.startsWith('@view-transition'))
+        .map((rule) => rule.cssText.replace(/\s+/g, ' ')),
+    );
+    expect(optIn).toContainEqual(expect.stringMatching(/navigation: auto; types: page-load;/));
+
+    const rootSelectors = await page.evaluate(() =>
+      Array.from(document.styleSheets)
+        .flatMap((sheet) => Array.from(sheet.cssRules))
+        .filter((rule): rule is CSSStyleRule => rule instanceof CSSStyleRule)
+        .filter((rule) => rule.selectorText.includes('active-view-transition-type(page-load)'))
+        .map((rule) => rule.cssText.replace(/\s+/g, ' ')),
+    );
+    expect(rootSelectors).toContainEqual(
+      expect.stringMatching(/view-transition-old\(root\) \{ animation: .*page-fade-out; \}$/),
+    );
+    expect(rootSelectors).toContainEqual(
+      expect.stringMatching(/view-transition-new\(root\) \{ animation: .*page-rise-in; \}$/),
+    );
+  });
+});
