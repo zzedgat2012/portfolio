@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { listArticles } from '@/features/articles';
 import { CV_PDF_FILE_NAME, CV_PDF_PATH } from '@/features/cv';
 import {
@@ -12,18 +13,36 @@ import {
 } from '@/features/home';
 import { findProfileLinkByIcon, getProfile } from '@/features/profile';
 import { listProjects } from '@/features/projects';
+import { buildPersonJsonLd, HOME_PATH } from '@/features/seo';
+import { getSiteSettings } from '@/features/settings';
+import { buildPageMetadata } from '@/shared/lib';
+import { JsonLd } from '@/shared/ui';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [profile, settings] = await Promise.all([getProfile(), getSiteSettings()]);
+  return buildPageMetadata({
+    title: null,
+    description: settings.description,
+    siteName: settings.siteName,
+    siteUrl: settings.siteUrl,
+    path: HOME_PATH,
+    image: profile.portrait,
+  });
+}
 
 /** Home (D1): hero, featured carousel and the #about … #contact sections. */
 export default async function HomeRoute() {
-  const [profile, projects, articles] = await Promise.all([
+  const [profile, projects, articles, settings] = await Promise.all([
     getProfile(),
     listProjects(),
     listArticles(),
+    getSiteSettings(),
   ]);
   const featuredSlides = projects.filter((project) => project.isFeatured).map(toFeaturedSlide);
 
   return (
     <>
+      <JsonLd data={buildPersonJsonLd(profile, settings.siteUrl)} />
       <HomeHero
         heroTitle={profile.heroTitle}
         heroTagline={profile.heroTagline}

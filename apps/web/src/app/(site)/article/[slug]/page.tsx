@@ -6,8 +6,10 @@ import {
   listArticles,
 } from '@/features/articles';
 import { getProfile } from '@/features/profile';
+import { buildArticleJsonLd } from '@/features/seo';
 import { getSiteSettings } from '@/features/settings';
 import { buildAbsoluteUrl, buildPageMetadata } from '@/shared/lib';
+import { JsonLd } from '@/shared/ui';
 
 type ArticleRouteProps = { params: Promise<{ slug: string }> };
 
@@ -20,11 +22,20 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
 
 export async function generateMetadata({ params }: ArticleRouteProps): Promise<Metadata> {
   const { slug } = await params;
-  const [article, settings] = await Promise.all([getArticleBySlug(slug), getSiteSettings()]);
+  const [article, profile, settings] = await Promise.all([
+    getArticleBySlug(slug),
+    getProfile(),
+    getSiteSettings(),
+  ]);
   return buildPageMetadata({
     title: article.title,
     description: article.summary,
     siteName: settings.siteName,
+    siteUrl: settings.siteUrl,
+    path: buildArticlePath(slug),
+    // Articles without a cover share the author's portrait.
+    image: article.coverImage ?? profile.portrait,
+    publishedOn: article.publishedOn,
   });
 }
 
@@ -37,10 +48,13 @@ export default async function ArticleRoute({ params }: ArticleRouteProps) {
     getSiteSettings(),
   ]);
   return (
-    <ArticleDetail
-      article={article}
-      author={profile}
-      canonicalUrl={buildAbsoluteUrl(settings.siteUrl, buildArticlePath(slug))}
-    />
+    <>
+      <JsonLd data={buildArticleJsonLd(article, profile, settings.siteUrl)} />
+      <ArticleDetail
+        article={article}
+        author={profile}
+        canonicalUrl={buildAbsoluteUrl(settings.siteUrl, buildArticlePath(slug))}
+      />
+    </>
   );
 }

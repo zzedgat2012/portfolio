@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { CvSheet, toCv } from '@/features/cv';
+import { CV_PAGE_PATH, CvSheet, toCv } from '@/features/cv';
 import { getProfile } from '@/features/profile';
 import { getSiteSettings } from '@/features/settings';
 import { buildPageMetadata } from '@/shared/lib';
@@ -10,7 +10,14 @@ const PAGE_TITLE = 'CV';
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   return {
-    ...buildPageMetadata({ title: PAGE_TITLE, description: null, siteName: settings.siteName }),
+    ...buildPageMetadata({
+      title: PAGE_TITLE,
+      description: null,
+      siteName: settings.siteName,
+      siteUrl: settings.siteUrl,
+      path: CV_PAGE_PATH,
+      image: null,
+    }),
     // The PDF is the public artifact; the print page itself stays out of search results.
     robots: { index: false },
   };

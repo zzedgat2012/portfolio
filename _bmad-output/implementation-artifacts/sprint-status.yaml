@@ -16,6 +16,6 @@ development_status:
   2-4-article-page: review
   2-5-cv-page-pdf: review
   epic-3: backlog
-  3-1-seo-feeds-redirects: ready-for-dev
+  3-1-seo-feeds-redirects: review
   3-2-ci-cd: ready-for-dev
   3-3-cut-over: ready-for-dev

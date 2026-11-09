@@ -5,3 +5,12 @@ redirects:
   - from: /feed/
     to: /feed.xml
     status: 301
+  - from: /article/category/*
+    to: /#articles
+    status: 301
+  - from: /article/tag/*
+    to: /#articles
+    status: 301
+  - from: /project-tag/*
+    to: /#projects
+    status: 301

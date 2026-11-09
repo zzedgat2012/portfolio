@@ -12,4 +12,6 @@ export {
   toLongDateLabel,
   toYearMonthLabel,
 } from './date-labels';
+export type { JsonLd } from './serialize-json-ld';
+export { serializeJsonLd } from './serialize-json-ld';
 export { toWebsiteLabel } from './website-label';

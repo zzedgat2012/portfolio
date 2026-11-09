@@ -9,6 +9,7 @@
     "test": "vitest run",
     "lint": "biome check .",
     "test:e2e": "playwright test",
+    "verify:parity": "tsx scripts/verify-parity.ts",
     "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {

@@ -1,7 +1,15 @@
 import type { Metadata } from 'next';
-import { getProjectBySlug, listProjects, ProjectDetail } from '@/features/projects';
+import { getProfile } from '@/features/profile';
+import {
+  buildProjectPath,
+  getProjectBySlug,
+  listProjects,
+  ProjectDetail,
+} from '@/features/projects';
+import { buildProjectJsonLd } from '@/features/seo';
 import { getSiteSettings } from '@/features/settings';
 import { buildPageMetadata } from '@/shared/lib';
+import { JsonLd } from '@/shared/ui';
 
 type ProjectRouteProps = { params: Promise<{ slug: string }> };
 
@@ -19,11 +27,24 @@ export async function generateMetadata({ params }: ProjectRouteProps): Promise<M
     title: project.title,
     description: project.summary,
     siteName: settings.siteName,
+    siteUrl: settings.siteUrl,
+    path: buildProjectPath(slug),
+    image: project.coverImage,
   });
 }
 
 /** `/project/<slug>/` (architecture D1). */
 export default async function ProjectRoute({ params }: ProjectRouteProps) {
   const { slug } = await params;
-  return <ProjectDetail project={await getProjectBySlug(slug)} />;
+  const [project, profile, settings] = await Promise.all([
+    getProjectBySlug(slug),
+    getProfile(),
+    getSiteSettings(),
+  ]);
+  return (
+    <>
+      <JsonLd data={buildProjectJsonLd(project, profile, settings.siteUrl)} />
+      <ProjectDetail project={project} />
+    </>
+  );
 }

@@ -7,6 +7,7 @@ export { Container } from './Container';
 export { CopyButton } from './CopyButton';
 export { ExternalLinkButton } from './ExternalLinkButton';
 export { HighlightedMarkdown } from './HighlightedMarkdown';
+export { JsonLd } from './JsonLd';
 export { Markdown } from './Markdown';
 export { SectionDisplayHeading } from './SectionDisplayHeading';
 export { SectionEyebrow } from './SectionEyebrow';

@@ -10,6 +10,7 @@ const openSans = Open_Sans({ subsets: ['latin'], variable: '--font-open-sans', d
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   return {
+    metadataBase: new URL(settings.siteUrl),
     title: { default: settings.siteName, template: `%s | ${settings.siteName}` },
     description: settings.description,
   };

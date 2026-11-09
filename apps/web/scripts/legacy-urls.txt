@@ -1,0 +1,58 @@
+# Story 3.1 AC6: URLs of the old WordPress site that must keep answering after cut-over
+# (200, or a 301/308 to a 200). Checked by `pnpm --filter web verify:parity <baseUrl>`.
+# Recorded 2026-11-08 from https://edgar-ferreira.com/wp-sitemap.xml and its sub-sitemaps
+# (posts-post, posts-page, posts-project, taxonomies-category, taxonomies-post_tag,
+# taxonomies-project_tag; wp-sitemap-users-1.xml answers 404), plus /feed/ and the sitemap itself.
+# Paths only, one per line.
+
+# page
+/
+
+# project (CPT)
+/project/ecommerce-platform/
+/project/kafka-golang-microservices/
+/project/task-management/
+
+# post
+/article/kafka-golang-setup/
+/article/modern-css/
+/article/oracle-apex-cloudflare-proxy-oauth/
+/article/react-performance/
+/article/scalable-rest-apis/
+
+# feed and sitemap (301 to /feed.xml and /sitemap.xml)
+/feed/
+/wp-sitemap.xml
+
+# taxonomy archives: no index pages on the new site (PRD); 301 to the home sections
+/article/category/uncategorized/
+/article/tag/golang/
+/article/tag/kafka/
+/article/tag/docker/
+/article/tag/microservices/
+/article/tag/css/
+/article/tag/frontend/
+/article/tag/web-design/
+/article/tag/responsive/
+/article/tag/oracle-apex/
+/article/tag/cloudflare/
+/article/tag/oci/
+/article/tag/pl-sql/
+/article/tag/oauth2/
+/article/tag/security/
+/article/tag/react/
+/article/tag/performance/
+/article/tag/javascript/
+/article/tag/api/
+/article/tag/rest/
+/article/tag/backend/
+/article/tag/scalability/
+/project-tag/react/
+/project-tag/node-js/
+/project-tag/postgresql/
+/project-tag/golang/
+/project-tag/kafka/
+/project-tag/docker/
+/project-tag/vue/
+/project-tag/typescript/
+/project-tag/mongodb/
