@@ -24,3 +24,7 @@ Source: [prd-site-migration.md](prd-site-migration.md) · Decisions: [architectu
 
 - **3.2 CI/CD**: GitHub Actions (PR checks; deploy on `main`), Cloudflare API token as repo secret (D5).
 - **3.3 Cut-over**: apex + www to `portfolio-web`, parity check on production, rollback documented (D6).
+
+## Epic 4: Polish
+
+- **4.1 Motion and reading polish** (page transitions, smooth scrolling, custom scrollbar, reading-progress bar): [4.1-motion-and-reading-polish.md](../implementation-artifacts/stories/4.1-motion-and-reading-polish.md)

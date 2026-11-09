@@ -334,7 +334,14 @@ Profundidade por superfície mais clara e borda fina, não por sombra.
 - `cta-inset`: `inset 0 1px 0 rgba(255,255,255,0.3)` — brilho superior do CTA do Hero.
 - Ornamento de fundo: círculos de 1px em `border` a 30% (utilitário `circle-accent`) e um brilho branco a 5% com blur.
 
-Movimento: seções entram com opacidade 0→1 e `translateY(40px) scale(.98)`→0 em 0.9s `cubic-bezier(0.16, 1, 0.3, 1)`, com delays de 80–300ms; desligado com `prefers-reduced-motion`. Hovers trocam cor em 150ms; cards e tiles escalam 1.05.
+Movimento (curva padrão `cubic-bezier(0.16, 1, 0.3, 1)`; tudo desligado com `prefers-reduced-motion`):
+
+- Seções entram com opacidade 0→1 e `translateY(40px) scale(.98)`→0 em 0.9s, com delays de 80–300ms.
+- Hovers trocam cor em 150ms; cards e tiles escalam 1.05.
+- Transição de página: a página antiga some em fade e a nova entra com opacidade 0→1 e `translateY(8px)`→0 em ~300ms (View Transitions, sem fallback). O header fica parado.
+- Rolagem suave (`scroll-behavior: smooth`) em links de âncora; `auto` com movimento reduzido.
+- Barra de progresso de leitura, só em artigos e projetos: 2px fixa no topo da viewport, gradiente `accent`→`primary`, largura = fração rolada do documento. Decorativa (`aria-hidden`); o tempo de leitura já está em texto.
+- Barra de rolagem fina: trilho `background`, polegar `border` com raio `full`, polegar `muted-foreground` no hover.
 
 ## Shapes
 
