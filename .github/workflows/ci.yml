@@ -1,0 +1,103 @@
+# CI/CD (architecture D5, story 3.2).
+#   pull_request -> lint, typecheck, unit (incl. content validation), e2e @smoke
+#   push to main -> the same checks with the full e2e suite, then wrangler deploy of apps/web
+# Decap's editorial workflow merges content PRs into main, so every publish deploys here.
+# Deploy needs the repo secret CLOUDFLARE_API_TOKEN (Workers Scripts:Edit on the owning account;
+# account_id is pinned in apps/web/wrangler.jsonc). Without it the deploy job is skipped, not failed.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  WRANGLER_SEND_METRICS: 'false'
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  checks:
+    name: Lint, typecheck, test, e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4 # version from package.json "packageManager"
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Chromium serves both Playwright e2e and the postbuild CV PDF step (D4).
+      - run: pnpm --filter web exec playwright install --with-deps chromium
+
+      - run: pnpm turbo lint typecheck test
+
+      - name: E2E (@smoke on PRs, full suite on main)
+        run: pnpm --filter web test:e2e ${{ github.event_name == 'pull_request' && '--grep @smoke' || '' }}
+
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7
+
+  deploy:
+    name: Deploy to Cloudflare
+    needs: checks
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    environment:
+      name: production
+      url: https://edgar-ferreira.com
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - name: Require CLOUDFLARE_API_TOKEN
+        id: token
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::warning::CLOUDFLARE_API_TOKEN is not set; skipping deploy. See .github/workflows/ci.yml."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.token.outputs.present == 'true'
+        uses: actions/checkout@v5
+
+      - if: steps.token.outputs.present == 'true'
+        uses: pnpm/action-setup@v4
+
+      - if: steps.token.outputs.present == 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - if: steps.token.outputs.present == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - if: steps.token.outputs.present == 'true'
+        run: pnpm --filter web exec playwright install --with-deps chromium
+
+      # Builds from the real content/ (default CONTENT_DIR), writes _redirects and the CV PDF, deploys.
+      - if: steps.token.outputs.present == 'true'
+        run: pnpm --filter web run deploy
