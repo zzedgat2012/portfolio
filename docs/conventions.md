@@ -67,7 +67,10 @@ portfolio/
     conventions.md      this file
     ai/                 prompts for external agents (OpenPencil design agent)
   design/               OpenPencil mockups (portfolio.fig) and exports/
-  external/             original WordPress theme repo (gitignored, read-only, last resort)
+  external/             legacy repo clones (gitignored, read-only, last resort)
+    edgar-portfolio-tema/       original Sage theme
+    edgar-portfolio-wordpress/  Bedrock WordPress application
+    terraform/                  old hosting infrastructure
   .claude/              Claude Code rules (product, design system), skills and settings
   .mcp.json             MCP servers for Claude Code (open-pencil)
   AGENTS.md             condensed rules for coding agents
@@ -486,17 +489,21 @@ Every Roots-stack concept has a direct home; the migration is an idempotent Type
 6. **Redirects:** generate `content/settings/redirects.yml` mapping old WP permalinks to new routes; the web app turns it into 301s.
 7. **Verify:** run the content tests, compare entry counts per type with WordPress, spot-check pages visually, then commit the content in one reviewed PR.
 
-### The original theme in `external/` (last resort)
+### The legacy repositories in `external/` (last resort)
 
-The original WordPress theme repository is kept locally in `external/`. It is in `.gitignore`, so it may be
-missing on a fresh clone, and it is never part of the build.
+The legacy repositories are cloned locally into `external/`, one folder each: the Sage theme
+(`edgar-portfolio-tema/`), the Bedrock WordPress application (`edgar-portfolio-wordpress/`) and the old
+hosting infrastructure (`terraform/`). The folder is in `.gitignore`, so it may be missing on a fresh clone,
+and it is never part of the build. Most questions are answered by the theme; the table below names the
+other repositories where they apply.
 
 | Question | Look here first | `external/` only if still unanswered |
 | --- | --- | --- |
 | What must this page do? | BMAD story and PRD | rendering logic in Sage views and controllers |
 | How must it look? | `DESIGN.md` and the OpenPencil mockup | Blade partials and the old Tailwind config |
 | Which fields does this content have? | `config.yml`, the Zod schemas and migrated files | ACF field group exports (`acf-json/`) |
-| Which old URLs must redirect? | `content/settings/redirects.yml` | permalink and rewrite rules in the theme |
+| Which old URLs must redirect? | `content/settings/redirects.yml` | permalink and rewrite rules in the theme or the Bedrock config |
+| How was the old site hosted? | architecture doc and the story 3.3 cut-over runbook | `terraform/` |
 
 Rules:
 

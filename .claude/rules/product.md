@@ -44,4 +44,4 @@ and be easier for editors to maintain.
 | Rationale and long examples | `docs/conventions.md` |
 | How it looks (tokens, components, rules) | `DESIGN.md` |
 | What each screen looks like | OpenPencil mockups in `design/` |
-| How the old site did it (last resort only, read-only) | original WordPress theme in `external/` (gitignored) |
+| How the old site did it (last resort only, read-only) | legacy repos in `external/` (theme, Bedrock app, terraform; gitignored) |

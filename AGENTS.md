@@ -23,7 +23,7 @@ docs/                       long-lived human docs (conventions.md, ai/ prompts)
 DESIGN.md                   visual system (owned by the BMAD UX skill)
 design/                     OpenPencil mockups (portfolio.fig) and exports/
 .claude/                    Claude Code rules, skills, settings; .mcp.json holds the open-pencil server
-external/                   original WordPress theme (Bedrock/Sage), gitignored, read-only, last resort
+external/                   legacy repos (Sage theme, Bedrock app, terraform), gitignored, read-only, last resort
 ```
 
 Apps depend on packages, never on each other. `content/` is data: the migrator writes it, Decap edits it,
@@ -31,8 +31,12 @@ Apps depend on packages, never on each other. `content/` is data: the migrator w
 
 ## Legacy WordPress reference (`external/`)
 
-`external/` holds the repository of the original WordPress theme. It is **gitignored**, may be missing on a
-clone, and is **reference material of last resort**, not a source of truth.
+`external/` holds local clones of the legacy repositories, one folder each. It is **gitignored**, may be
+missing on a clone, and is **reference material of last resort**, not a source of truth.
+
+- `external/edgar-portfolio-tema/`: the original Sage theme (Blade views, ACF, Tailwind config).
+- `external/edgar-portfolio-wordpress/`: the Bedrock WordPress application (config, plugins, permalinks).
+- `external/terraform/`: the old hosting infrastructure (Terraform/Ansible).
 
 - Consult it only after the story, the BMAD artifacts, `DESIGN.md`, the OpenPencil mockups and the migrated
   content in `content/` failed to answer a concrete question (for example: original markup or behavior of a
